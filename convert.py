@@ -64,11 +64,11 @@ for x in db_result:
     factory_mode_entry_count_max = 0
 
     # Max Battery Voltage (Last 12 Hours): 221 / 298 / 284 / 242
-    min_battery_voltage_counter = 0
-    min_battery_voltage_sum = 0
-    min_battery_voltage_avg = 0
-    min_battery_voltage_min = 0
-    min_battery_voltage_max = 0
+    max_battery_voltage_counter = 0
+    max_battery_voltage_sum = 0
+    max_battery_voltage_avg = 0
+    max_battery_voltage_min = 0
+    max_battery_voltage_max = 0
 
     # Min Battery Voltage (Last 12 Hours): 222 / 299 / 285 / 243
     min_battery_voltage_counter = 0
@@ -141,7 +141,7 @@ for x in db_result:
         tme = i[4]
 
         # Average Battery Voltage (Last 12 Hours): 220 / 297 / 283 / 241
-        if tpe == 220 or tpe == 297 or tpe == 183 or tpe == 241:
+        if tpe == 220 or tpe == 297 or tpe == 283 or tpe == 241:
             average_battery_voltage_counter += 1
             average_battery_voltage_sum += value
             if average_battery_voltage_min >= value:
@@ -149,7 +149,23 @@ for x in db_result:
             if average_battery_voltage_max <= value:
                 average_battery_voltage_max = value 
 
+        # Max Battery Voltage (Last 12 Hours): 221 / 298 / 284 / 242
+        if tpe == 221 or tpe == 298 or tpe == 284 or tpe == 242:
+            max_battery_voltage_counter += 1
+            max_battery_voltage_sum += value
+            if max_battery_voltage_min >= value:
+                max_battery_voltage_min = value
+            if max_battery_voltage_max <= value:
+                max_battery_voltage_max = value
 
+        # Min Battery Voltage (Last 12 Hours): 222 / 299 / 285 / 243
+        if tpe == 222 or tpe == 299 or tpe == 285 or tpe == 243:
+            min_battery_voltage_counter += 1
+            min_battery_voltage_sum += value
+            if min_battery_voltage_min >= value:
+                min_battery_voltage_min = value
+            if min_battery_voltage_max <= value:
+                min_battery_voltage_max = value
         
     dt_cursor = db_con.cursor()
     dt_sql = "SELECT IFNULL(MIN(when_date), '2021-11-01') AS min_date, DATE_SUB(CURDATE(), INTERVAL 1 DAY) AS max_date FROM report_dailyusagedata WHERE serial_number = %s"
